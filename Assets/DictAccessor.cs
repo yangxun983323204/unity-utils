@@ -1,16 +1,4 @@
-﻿/*************************************************************************
- *  Copyright © 2019 NetDragon Websoft Inc. All rights reserved.
- *------------------------------------------------------------------------
- *  File         :  DictAccessor.cs
- *  Description  :  
- *------------------------------------------------------------------------
- *  Author       :  yangxun
- *  Version      :  v0.1
- *  Date         :  2020/6/9 星期二 下午 2:22:13
- *  Description  :  Initial development version.
- *************************************************************************/
-
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
