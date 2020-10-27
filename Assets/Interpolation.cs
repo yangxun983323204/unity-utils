@@ -11,7 +11,7 @@ namespace YX
         /// </summary>
         public static float Concave(float from, float to, float t)
         {
-            float t1 = Mathf.Sqrt(t);
+            float t1 = Mathf.Pow(t, 2);
             return Mathf.Lerp(from, to, t1);
         }
 
@@ -20,7 +20,7 @@ namespace YX
         /// </summary>
         public static float Raise(float from, float to, float t)
         {
-            float t1 = Mathf.Pow(t, 2);
+            float t1 = 1 - Mathf.Pow(t, 2);
             return Mathf.Lerp(from, to, t1);
         }
     }
