@@ -117,5 +117,11 @@ namespace YX
 
             return -1;
         }
+
+        public void Clear()
+        {
+            _idxHead = _idxTail = -1;
+            Count = 0;
+        }
     }
 }
