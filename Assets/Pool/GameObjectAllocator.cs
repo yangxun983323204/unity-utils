@@ -6,6 +6,10 @@ namespace YX
 {
     public class GameObjectAllocator : IObjectAllocator<GameObject>
     {
+        public GameObject CacheRoot
+        {
+            get { return _cacheRoot.gameObject; }
+        }
         protected Transform _cacheRoot = null;
         protected GameObject _template = null;
 
