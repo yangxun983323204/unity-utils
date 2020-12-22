@@ -28,6 +28,20 @@ namespace YX
             Dict.TryGetValue(key, out def);
             return def;
         }
+        public TValue GetOrNew(TKey key,Func<TKey,TValue> ctor)
+        {
+            if (Dict == null)
+                Dict = new Dictionary<TKey, TValue>();
+
+            TValue val;
+            if(!Dict.TryGetValue(key, out val))
+            {
+                val = ctor(key);
+                Dict.Add(key, val);
+            }
+
+            return val;
+        }
         /// <summary>
         /// 设置字典的键和值
         /// </summary>
@@ -76,6 +90,24 @@ namespace YX
             if (Dict.Contains(key))
                 def = Dict[key];
             return def;
+        }
+        public object GetOrNew(object key, Func<object, object> ctor)
+        {
+            if (Dict == null)
+                Dict = new Dictionary<object, object>();
+
+            object val;
+            if (Dict.Contains(key))
+            {
+                val = Dict[key];
+            }
+            else
+            {
+                val = ctor(key);
+                Dict.Add(key, val);
+            }
+
+            return val;
         }
         /// <summary>
         /// 设置字典的键和值
