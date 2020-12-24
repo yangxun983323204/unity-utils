@@ -62,11 +62,13 @@ namespace YX
         {
             bool processed = false;
             var listeners = _evtListenerMap.Get(evt.GetEventType(), null);
-            if (listeners!=null)
+            if (listeners != null)
             {
-                foreach (var listener in listeners)
+                var node = listeners.First;
+                while (node != null)
                 {
-                    listener.Invoke(evt);
+                    node.Value.Invoke(evt);
+                    node = node.Next;
                     processed = true;
                 }
             }
