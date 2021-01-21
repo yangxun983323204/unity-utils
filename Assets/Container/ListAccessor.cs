@@ -52,7 +52,7 @@ namespace YX
                 var addCnt = cnt - List.Count;
                 for (int i = 0; i < addCnt; i++)
                 {
-                    List.Add(default);
+                    List.Add(default(T));
                 }
             }
         }
