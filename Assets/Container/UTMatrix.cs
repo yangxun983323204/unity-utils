@@ -30,7 +30,7 @@ namespace YX
             return GetRaw(GetBufferIdx(i, j));
         }
         /// <summary>
-        /// 获取i行j列的值，只能取上三角部分
+        /// 设置i行j列的值，只能设置上三角部分
         /// </summary>
         public void Set(int i, int j, T val)
         {
