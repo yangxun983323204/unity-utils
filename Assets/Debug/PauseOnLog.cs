@@ -24,6 +24,7 @@ namespace YX
         [Serializable]
         public class PausePoint
         {
+            public string Name;
             public string Key;
             public KeyWordsType Type;
         }
