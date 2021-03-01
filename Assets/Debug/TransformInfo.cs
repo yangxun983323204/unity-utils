@@ -29,6 +29,7 @@ namespace YX
         private void Awake()
         {
             _tran = transform;
+            SyncInfo();
         }
 
         private void Update()
