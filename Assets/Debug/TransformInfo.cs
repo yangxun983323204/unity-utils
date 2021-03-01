@@ -24,11 +24,11 @@ namespace YX
         public float WorldSZ;
         public float LocalSX, LocalSY, LocalSZ;
 
-        private Transform _tran;
+        public Transform TargetTran;
 
         private void Awake()
         {
-            _tran = transform;
+            TargetTran = transform;
             SyncInfo();
         }
 
@@ -50,29 +50,29 @@ namespace YX
 
         private void SyncInfo()
         {
-            WorldX = _tran.position.x;
-            WorldY = _tran.position.y;
-            WorldZ = _tran.position.z;
+            WorldX = TargetTran.position.x;
+            WorldY = TargetTran.position.y;
+            WorldZ = TargetTran.position.z;
 
-            LocalX = _tran.localPosition.x;
-            LocalY = _tran.localPosition.y;
-            LocalZ = _tran.localPosition.z;
+            LocalX = TargetTran.localPosition.x;
+            LocalY = TargetTran.localPosition.y;
+            LocalZ = TargetTran.localPosition.z;
 
-            WorldRX = _tran.eulerAngles.x;
-            WorldRY = _tran.eulerAngles.y;
-            WorldRZ = _tran.eulerAngles.z;
+            WorldRX = TargetTran.eulerAngles.x;
+            WorldRY = TargetTran.eulerAngles.y;
+            WorldRZ = TargetTran.eulerAngles.z;
 
-            LocalRX = _tran.localEulerAngles.x;
-            LocalRY = _tran.localEulerAngles.y;
-            LocalRZ = _tran.localEulerAngles.z;
+            LocalRX = TargetTran.localEulerAngles.x;
+            LocalRY = TargetTran.localEulerAngles.y;
+            LocalRZ = TargetTran.localEulerAngles.z;
 
-            WorldSX = _tran.lossyScale.x;
-            WorldSY = _tran.lossyScale.y;
-            WorldSZ = _tran.lossyScale.z;
+            WorldSX = TargetTran.lossyScale.x;
+            WorldSY = TargetTran.lossyScale.y;
+            WorldSZ = TargetTran.lossyScale.z;
 
-            LocalSX = _tran.localScale.x;
-            LocalSY = _tran.localScale.y;
-            LocalSZ = _tran.localScale.z;
+            LocalSX = TargetTran.localScale.x;
+            LocalSY = TargetTran.localScale.y;
+            LocalSZ = TargetTran.localScale.z;
         }
     }
 }
