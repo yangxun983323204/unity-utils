@@ -1,6 +1,9 @@
 ﻿#if UNITY_EDITOR
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
+using System.Text;
 using UnityEditor;
 using UnityEngine;
 
@@ -18,40 +21,76 @@ namespace YX
             End,
         }
 
-        public KeyWordsType Type = KeyWordsType.Start;
-        public string KeyWords;
+        [Serializable]
+        public class PausePoint
+        {
+            public string Key;
+            public KeyWordsType Type;
+        }
+
+        internal class JsonWrap
+        {
+            public PausePoint[] KeyWords;
+        }
+
+        public PausePoint[] KeyWords = new PausePoint[0];
+
+        private string _cacheFile = "YXPausePoint.config";
 
         private void Start()
         {
+            if (File.Exists(_cacheFile))
+            {
+                try
+                {
+                    KeyWords = JsonUtility.FromJson<JsonWrap>(File.ReadAllText(_cacheFile,Encoding.UTF8)).KeyWords;
+                }
+                catch
+                {
+                    KeyWords = new PausePoint[0];
+                }
+            }
             Application.logMessageReceived += OnRecLog;
         }
 
         private void OnDestroy()
         {
             Application.logMessageReceived -= OnRecLog;
+            File.WriteAllText(_cacheFile, JsonUtility.ToJson(new JsonWrap() { KeyWords = KeyWords },true),Encoding.UTF8);
         }
 
         private void OnRecLog(string condition, string stackTrace, LogType type)
         {
-            if (string.IsNullOrEmpty(KeyWords))
+            if (KeyWords.Length<=0)
                 return;
 
-            switch (Type)
+            for (int i = 0; i < KeyWords.Length; i++)
+            {
+                MatchKeyWord(condition, KeyWords[i]);
+            }
+        }
+
+        private void MatchKeyWord(string log,PausePoint pp)
+        {
+            if (pp==null || string.IsNullOrEmpty(pp.Key))
+                return;
+
+            switch (pp.Type)
             {
                 case KeyWordsType.Start:
-                    if (condition.StartsWith(KeyWords))
+                    if (log.StartsWith(pp.Key))
                     {
                         EditorApplication.isPaused = true;
                     }
                     break;
                 case KeyWordsType.Contain:
-                    if (condition.Contains(KeyWords))
+                    if (log.Contains(pp.Key))
                     {
                         EditorApplication.isPaused = true;
                     }
                     break;
                 case KeyWordsType.End:
-                    if (condition.EndsWith(KeyWords))
+                    if (log.EndsWith(pp.Key))
                     {
                         EditorApplication.isPaused = true;
                     }
