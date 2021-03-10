@@ -36,5 +36,12 @@ namespace YX
             self.y = y;
             self.z = z;
         }
+        /// <summary>
+        /// 2017的实现更复杂，更高版本好像也是这样了
+        /// </summary>
+        public static bool Equals(ref Vector3 self,ref Vector3 other)
+        {
+            return self.x == other.x && self.y == other.y && self.z == other.z;
+        }
     }
 }
