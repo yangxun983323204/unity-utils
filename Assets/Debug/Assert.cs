@@ -48,6 +48,20 @@ namespace YX.Debug
             }
         }
 
+        public static void Catch<T>(Action action) where T : System.Exception
+        {
+            if (!Application.isEditor)
+                return;
+
+            try
+            {
+                action.Invoke();
+            }
+            catch (T)
+            {
+            }
+        }
+
         public static void ExpectException<T>(Type type, string method, params object[] args)
             where T : System.Exception
         {
@@ -85,6 +99,21 @@ namespace YX.Debug
                     return;
                 else
                     throw e.InnerException != null ? e.InnerException : e;
+            }
+        }
+
+        public static void ExpectException<T>(Action action) where T : System.Exception
+        {
+            if (!Application.isEditor)
+                return;
+
+            try
+            {
+                action.Invoke();
+                throw new System.NotImplementedException("期望产生异常:" + typeof(T).ToString());
+            }
+            catch (T)
+            {
             }
         }
 

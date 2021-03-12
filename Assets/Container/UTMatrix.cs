@@ -8,8 +8,10 @@ namespace YX
     /// </summary>
     public class UTMatrix<T>
     {
-        ListAccessor<T> _data;
+        public T[] __data;
+        public int N { get { return _n; } }
         int _n;
+        public int Max { get { return _max; } }
         int _max;
         /// <summary>
         /// 构造一个n*n的上三角矩阵
@@ -19,8 +21,7 @@ namespace YX
         {
             _n = n;
             int size = GetBufferSize();
-            _data = new ListAccessor<T>(size);
-            _data.Reserve(size);
+            __data = new T[size];
         }
         /// <summary>
         /// 获取i行j列的值，只能取上三角部分
@@ -43,14 +44,17 @@ namespace YX
         {
             _n = n;
             int size = GetBufferSize();
-            _data.Reserve(size);
+            if (__data.Length < size)
+            {
+                __data = new T[size];// resize;
+            }
         }
         /// <summary>
         /// 把整个矩阵设为val
         /// </summary>
         public void Reset(T val)
         {
-            SetRawRange(0, GetBufferSize(), val);
+            SetRawRange(0, _max, val);
         }
 
         #region 更多控制
@@ -62,10 +66,10 @@ namespace YX
 
         public static int GetBufferSize(int n)
         {
-            return  n * (n + 1) / 2;
+            return n * (n + 1) / 2;
         }
 
-        public int GetBufferIdx(int i,int j)
+        public int GetBufferIdx(int i, int j)
         {
             if (i > j)
                 throw new System.NotSupportedException("上三角阵不支持对下三角访问!");
@@ -75,12 +79,11 @@ namespace YX
             // i<=0时，S(i) = 0
             // i>0时，S(i) = i*n - i*(i-1)/2
             // K(i,j) = S(i) + (j-i)
-            int n = _n;
-            int Si = 0;
+            int Si;
             if (i <= 0)
                 Si = 0;
             else
-                Si = i * n - (int)(i * (i - 1) / 2f);
+                Si = i * _n - (int)(i * (i - 1) / 2f);
 
             return Si + (j - i);
         }
@@ -90,27 +93,30 @@ namespace YX
             if (idx >= _max)
                 throw new System.IndexOutOfRangeException();
 
-            return _data[idx];
+            return __data[idx];
         }
 
-        public void SetRaw(int idx,T val)
+        public void SetRaw(int idx, T val)
         {
             if (idx >= _max)
                 throw new System.IndexOutOfRangeException();
 
-            _data[idx] = val;
+            __data[idx] = val;
         }
         /// <summary>
         /// 把[start,end)范围内的值设为val
         /// </summary>
-        public void SetRawRange(int start,int end,T val)
+        public void SetRawRange(int start, int end, T val)
         {
             if (start >= _max)
                 throw new System.IndexOutOfRangeException();
             if (end > _max)
                 throw new System.IndexOutOfRangeException();
 
-            _data.SetRange(start, end, val);
+            for (int i = start; i < end; i++)
+            {
+                __data[i] = val;
+            }
         }
         #endregion
     }

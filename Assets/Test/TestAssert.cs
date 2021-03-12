@@ -18,6 +18,10 @@ public class TestAssert : MonoBehaviour
         {
 
         }
+
+        Assert.Catch<System.NotSupportedException>(()=> {
+            throw new System.NotSupportedException();
+        });
     }
 
     void Test1(int a,string b,float c)
