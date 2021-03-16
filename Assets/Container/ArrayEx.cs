@@ -14,11 +14,11 @@ namespace YX
             array[idx] = val;
         }
 
-        public static void SortedAdd<T>(this T[] array, int start, int end, T val, Func<T, bool> sortFunc)
+        public static void SortedAdd<T>(this T[] array, int start, int end, T val, Func<T, bool> condition)
         {
             for (int i = start; i < end; i++)
             {
-                if (!sortFunc(array[i]))
+                if (condition(array[i]))
                 {
                     array.Insert(end, val, i);
                     return;
@@ -28,11 +28,11 @@ namespace YX
             array.Insert(end, val, end);
         }
 
-        public static void SortedReplace<T>(this T[] array, int start, int end, T val, Func<T, bool> sortFunc)
+        public static void SortedReplace<T>(this T[] array, int start, int end, T val, Func<T, bool> condition)
         {
             for (int i = start; i < end; i++)
             {
-                if (!sortFunc(array[i]))
+                if (condition(array[i]))
                 {
                     array[i] = val;
                     return;
