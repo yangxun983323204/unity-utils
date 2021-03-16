@@ -25,7 +25,7 @@ namespace YX
             var idx = Array.FindIndex(Props, n => { return n!=null && n.Name == name; });
             if (idx>=0)
             {
-                Props[idx].Value = val.ToString();
+                Props[idx].Value = ToStr(val);
             }
             else
             {
@@ -40,7 +40,7 @@ namespace YX
                 {
                     if (Props[i] == null)
                     {
-                        var node = new KV1() { Name = name, Value = val.ToString() };
+                        var node = new KV1() { Name = name, Value = ToStr(val) };
                         Props[i] = node;
                         _useCnt++;
                         break;
