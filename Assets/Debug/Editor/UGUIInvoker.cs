@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEditor;
 using System.Reflection;
+using System.Text;
 
 namespace YX
 {
@@ -20,6 +21,8 @@ namespace YX
         {
             var wnd = GetWindow<UGUIInvoker>("UGUI Invoker");
             wnd.Show();
+            wnd.minSize = new Vector2(600, 400);
+            wnd.maxSize = new Vector2(600, 400);
         }
 
         private void OnGUI()
@@ -27,8 +30,11 @@ namespace YX
             EditorGUILayout.BeginVertical();
             EditorGUILayout.Space();
             Btn();
+            EditorGUILayout.Space();
             Tog();
+            EditorGUILayout.Space();
             Input();
+            EditorGUILayout.Space();
             Mono();
             EditorGUILayout.Space();
             EditorGUILayout.EndVertical();
@@ -67,6 +73,11 @@ namespace YX
             EditorGUILayout.EndHorizontal();
         }
 
+        private bool _preShowMonoMethods;
+        private bool _showMonoMethods;
+        private string _msCache;
+        private Vector2 _scroll;
+
         private void Mono()
         {
             EditorGUILayout.BeginHorizontal();
@@ -75,10 +86,31 @@ namespace YX
             if (GUILayout.Button("Call") && _mono != null && _monoFunc!=null)
             {
                 var t = _mono.GetType();
-                var m = t.GetMethod(_monoFunc, BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Static);
+                var m = t.GetMethod(_monoFunc.Trim(), BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Static);
                 m.Invoke(_mono, new object[] { });
             }
             EditorGUILayout.EndHorizontal();
+
+            _showMonoMethods = GUILayout.Toggle(_showMonoMethods,"ShowMethods");
+            if (_showMonoMethods && _preShowMonoMethods != _showMonoMethods && _mono != null)
+            {
+                var t = _mono.GetType();
+                var ms = t.GetMethods(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Static);
+                StringBuilder sb = new StringBuilder(1000);
+                foreach (var item in ms)
+                {
+                    sb.AppendLine(item.Name);
+                }
+                _msCache = sb.ToString();
+            }
+
+            if (_showMonoMethods)
+            {
+                _scroll = EditorGUILayout.BeginScrollView(_scroll, GUILayout.Width(580),GUILayout.Height(250));
+                GUILayout.TextArea(_msCache);
+                EditorGUILayout.EndScrollView();
+            }
+            _preShowMonoMethods = _showMonoMethods;
         }
     }
 }
