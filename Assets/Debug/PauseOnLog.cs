@@ -27,6 +27,7 @@ namespace YX
             public string Name;
             public string Key;
             public KeyWordsType Type;
+            public bool Enable;
         }
 
         internal class JsonWrap
@@ -67,7 +68,11 @@ namespace YX
 
             for (int i = 0; i < KeyWords.Length; i++)
             {
-                MatchKeyWord(condition, KeyWords[i]);
+                var p = KeyWords[i];
+                if (p == null || !p.Enable)
+                    continue;
+
+                MatchKeyWord(condition, p);
             }
         }
 
