@@ -14,7 +14,6 @@ namespace YX
             var wnd = GetWindow<AssetBundleExplorer>("AssetBundleExplorer");
             wnd.Show();
             wnd.minSize = new Vector2(600, 400);
-            wnd.maxSize = new Vector2(600, 400);
         }
 
         private void OnGUI()
@@ -50,7 +49,7 @@ namespace YX
             _assets = EditorGUILayout.ObjectField(_assets, typeof(DefaultAsset), true) as DefaultAsset;
             if (GUILayout.Button("Open") && _assets != null)
             {
-                if (_bundle!=null)
+                if (_bundle != null)
                 {
                     _bundle.Unload(true);
                     _bundle = null;
@@ -73,7 +72,7 @@ namespace YX
             if (_list != null && _list.Length > 0)
             {
                 EditorGUILayout.BeginHorizontal();
-                _scroll = EditorGUILayout.BeginScrollView(_scroll, GUILayout.Width(580), GUILayout.Height(250));
+                _scroll = EditorGUILayout.BeginScrollView(_scroll, GUILayout.MaxWidth(100000), GUILayout.Height(250));
                 foreach (var item in _list)
                 {
                     EditorGUILayout.BeginHorizontal();
@@ -101,6 +100,11 @@ namespace YX
                 wnd.Content = content;
                 wnd.Show();
             }
+            else if (name.EndsWith(".prefab"))
+            {
+                var content = _bundle.LoadAsset<GameObject>(name);
+                Instantiate(content);
+            }
         }
     }
 
@@ -115,12 +119,11 @@ namespace YX
         private void Awake()
         {
             minSize = new Vector2(1200, 400);
-            maxSize = new Vector2(1200, 400);
         }
 
         private void OnGUI()
         {
-            _scroll = EditorGUILayout.BeginScrollView(_scroll, GUILayout.Width(1200), GUILayout.Height(400));
+            _scroll = EditorGUILayout.BeginScrollView(_scroll, GUILayout.MaxWidth(100000), GUILayout.MaxHeight(100000));
             GUILayout.TextArea(Content);
             EditorGUILayout.EndScrollView();
         }
