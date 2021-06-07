@@ -72,7 +72,7 @@ namespace YX
             if (_list != null && _list.Length > 0)
             {
                 EditorGUILayout.BeginHorizontal();
-                _scroll = EditorGUILayout.BeginScrollView(_scroll, GUILayout.MaxWidth(100000), GUILayout.Height(250));
+                _scroll = EditorGUILayout.BeginScrollView(_scroll, GUILayout.MaxWidth(100000), GUILayout.MaxWidth(100000));
                 foreach (var item in _list)
                 {
                     EditorGUILayout.BeginHorizontal();
