@@ -1,0 +1,4 @@
+可以查看和修改unity应用程序场景的工具
+先把BepInEx解压进应用目录，再把RuntimeUnityEditor解压进应用目录
+详见
+https://github.com/ManlyMarco/RuntimeUnityEditor
