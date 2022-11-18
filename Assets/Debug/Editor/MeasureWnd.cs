@@ -3,31 +3,58 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
 using System.Linq;
+using System;
 
 namespace YX
 {
     public class MeasureWnd : EditorWindow
     {
+        [Serializable]
+        public class Point
+        {
+            [Tooltip("优先使用")]
+            public Transform tran;
+            public Vector3 pos;
+            public Vector3 offset;
+            public bool localOffset;
+
+            public Vector3 GetWPos()
+            {
+                if (tran != null)
+                {
+                    if (localOffset)
+                        return tran.TransformPoint(offset);
+                    else
+                        return tran.position + offset;
+                }
+                else
+                {
+                    return pos + offset;
+                }
+            }
+        }
+
         SerializedObject _serializedObj;
 
         Color _TextColor = Color.yellow;
         Color _PosTextColor = Color.green;
         Vector3[] _tempRect = new Vector3[4];
         List<Vector3> _tempList = new List<Vector3>(10);
+
         // 测量transform之间距离
         bool _measure = false;
         bool _measureIgnoreX = false;
         bool _measureIgnoreY = false;
         bool _measureIgnoreZ = false;
         [SerializeField]
-        List<Transform> _measureTrans = new List<Transform>();
+        List<Point> _measureTrans = new List<Point>();
         SerializedProperty _measureTransSP;
         // 测量点与平面距离
         bool _measureProj = false;
         bool _showProjCoor = false;
         bool _measureProjDis = false;
         [SerializeField]
-        List<Transform> _projDots = new List<Transform>();
+        List<Point> _projDots = new List<Point>();
         SerializedProperty _projDotsSP;
         Transform _projPlane;
         Plane _planeCache = new Plane();
@@ -84,13 +111,15 @@ namespace YX
 
             if (GUILayout.Button("从选中", GUILayout.Width(50)))
             {
-                _measureTrans = Selection.GetTransforms(SelectionMode.ExcludePrefab).ToList();
+                _measureTrans = Selection.GetTransforms(SelectionMode.ExcludePrefab)
+                    .Select((n,idx)=>new Point() { tran = n }).ToList();
+
                 _measureTrans.Sort((a, b) => {
                     if (a == null)
                         return 1;
                     else if (b == null)
                         return -1;
-                    return string.Compare(a.gameObject.name, b.gameObject.name);
+                    return string.Compare(a.tran.gameObject.name, b.tran.gameObject.name);
                 });
             }
 
@@ -113,13 +142,15 @@ namespace YX
 
             if (GUILayout.Button("从选中", GUILayout.Width(50)))
             {
-                _projDots = Selection.GetTransforms(SelectionMode.ExcludePrefab).ToList();
+                _projDots = Selection.GetTransforms(SelectionMode.ExcludePrefab)
+                    .Select((n, idx) => new Point() { tran = n }).ToList();
+
                 _projDots.Sort((a, b) => {
                     if (a == null)
                         return 1;
                     else if (b == null)
                         return -1;
-                    return string.Compare(a.gameObject.name, b.gameObject.name);
+                    return string.Compare(a.tran.gameObject.name, b.tran.gameObject.name);
                 });
             }
             GUILayout.EndHorizontal();
@@ -146,7 +177,7 @@ namespace YX
             if (_measure && _measureTrans.Count >= 2)
             {
                 _tempList.Clear();
-                _measureTrans.ForEach(t => _tempList.Add(t.position));
+                _measureTrans.ForEach(t => _tempList.Add(t.GetWPos()));
                 MeasurePsDistanceInternal(sceneView, _tempList);
             }
         }
@@ -171,6 +202,13 @@ namespace YX
                 center += a;
                 Handles.DrawLine(a, b);
                 HandleUtls.Label((a + b) / 2f, dis.ToString(), _TextColor);
+                if (i == 0)
+                    DrawMainPoint(a);
+                else
+                    DrawPoint(a);
+
+                if(i == vs.Count-2)
+                    DrawPoint(b);
             }
 
             if (vs.Count >= 3)
@@ -200,14 +238,12 @@ namespace YX
 
                 foreach (var _projDot in _projDots)
                 {
-                    var d = _projDot.position;
+                    var d = _projDot.GetWPos();
                     var proj = _planeCache.ClosestPointOnPlane(d);
-                    var dis = Vector3.Distance(_projDot.position, proj);
+                    var dis = Vector3.Distance(d, proj);
 
-                    HandleUtls.GetScreenRect(d, 4, ref _tempRect);
-                    Handles.DrawSolidRectangleWithOutline(_tempRect, Color.red, Color.green);
-                    HandleUtls.GetScreenRect(proj, 4, ref _tempRect);
-                    Handles.DrawSolidRectangleWithOutline(_tempRect, Color.red * 0.2f, Color.green);
+                    DrawMainPoint(d);
+                    DrawPoint(proj);
                     HandleUtls.GetPlaneRect(_projPlane, 1, 1, ref _tempRect);
                     Handles.DrawSolidRectangleWithOutline(_tempRect, Color.green * 0.2f, Color.green);
                     Handles.DrawDottedLine(d, proj, 4);
@@ -247,6 +283,18 @@ namespace YX
             }
 
             return Vector3.Distance(a, b);
+        }
+
+        void DrawMainPoint(Vector3 wpos)
+        {
+            HandleUtls.GetScreenRect(wpos, 4, ref _tempRect);
+            Handles.DrawSolidRectangleWithOutline(_tempRect, Color.red, Color.green);
+        }
+
+        void DrawPoint(Vector3 wpos)
+        {
+            HandleUtls.GetScreenRect(wpos, 4, ref _tempRect);
+            Handles.DrawSolidRectangleWithOutline(_tempRect, Color.red * 0.2f, Color.green);
         }
     }
 }
