@@ -1,6 +1,6 @@
 import os.path
 import tkinter as tk
-# 需要先在命令行中执行以下命令安装tkinterdnd2模块
+# 需要先在命令行中执行以下命令安装pywin32模块
 # pip install pywin32
 import win32com.shell.shell as shell
 # 需要先在命令行中执行以下命令安装tkinterdnd2模块
