@@ -98,7 +98,7 @@ class Income:
         self.AfterTaxFundIncome = self.AfterTaxIncome - self.FundSum
 
     def Print(self)->None:
-        print(f"月薪：{self.monthIncome}，月数：{self.monthCount}，社保基数：{self.fund.base5:.2f}，公积金基数：{self.fund.base1:.2f}， 年度总和：税前：{self.BeforeTaxIncome}，五险一金个人：{self.FundSum:.2f}，五险一金公司：{self.CompanyFundSum:.2f}，免征税：{self.ThresholdSum}，专项扣除：{self.DeductSum}，个税：{self.Tax}，税后：{self.AfterTaxIncome}，税后不含五险一金：{self.AfterTaxFundIncome:.2f}")
+        print(f"月薪：{self.monthIncome}，月数：{self.monthCount}，社保基数：{self.fund.base5:.2f}，公积金基数：{self.fund.base1:.2f}， 年度总和：税前：{self.BeforeTaxIncome}，五险一金个人：{self.FundSum:.2f}，五险一金公司：{self.CompanyFundSum:.2f}，免征税：{self.ThresholdSum}，专项扣除：{self.DeductSum}，个税：{self.Tax:.2f}，税后：{self.AfterTaxIncome:.2f}，税后不含五险一金：{self.AfterTaxFundIncome:.2f}")
 
 class DataHelper:
     def CreateDefaultFund51()->Fund51:
