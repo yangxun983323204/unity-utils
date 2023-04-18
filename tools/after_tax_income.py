@@ -105,8 +105,8 @@ class DataHelper:
         old = FundItem(companyRate=0.2, companyAdd=0, selfRate=0.08, selfAdd=0)
         medical = FundItem(companyRate=0.1, companyAdd=0, selfRate=0.02, selfAdd=3)
         job = FundItem(companyRate=0.01, companyAdd=0, selfRate=0.002, selfAdd=0)
-        hurt = FundItem(companyRate=0.01, companyAdd=0, selfRate=0, selfAdd=0)# need ensure
-        birth = FundItem(companyRate=0.01, companyAdd=0, selfRate=0, selfAdd=0)# need ensure
+        hurt = FundItem(companyRate=0.02, companyAdd=0, selfRate=0, selfAdd=0)
+        birth = FundItem(companyRate=0.008, companyAdd=0, selfRate=0, selfAdd=0)
         house = FundItem(companyRate=0.12, companyAdd=0, selfRate=0.12, selfAdd=0)
 
         inst = Fund51(old=old, medical=medical, job=job, hurt=hurt, birth=birth, house=house)
